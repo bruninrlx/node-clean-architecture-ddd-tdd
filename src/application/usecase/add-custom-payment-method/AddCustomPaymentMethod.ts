@@ -1,3 +1,4 @@
+import { NotFoundError, UnauthorizedError } from '@/application/errors/errors'
 import CustomPaymentMethod from '@/domain/entity/CustomPaymentMethod'
 import RepositoryFactory from '@/domain/factory/RepositoryFactory'
 import CustomPaymentMethodRepository from '@/domain/repository/CustomPaymentMethodRepository'
@@ -18,22 +19,19 @@ export default class AddCustomPaymentMethod {
   }
 
   async execute(input: Input): Promise<Output> {
-    const wallet = this.walletRepository.getByOwnerCode(input.ownerCode)
+    const wallet = await this.walletRepository.getByOwnerCode(input.ownerCode)
     const owner = await this.ownerRepository.getByCode(input.ownerCode)
     const customPaymentMethod =
       await this.customPaymentRepository.getByOwnerCodeAndCustomPaymentMethodTitle(
         input.ownerCode,
         input.customPaymentMethod
       )
-
-    if (!wallet) throw new Error('Wallet not found')
-    if (!owner) throw new Error('Owner not found')
-    if (customPaymentMethod) throw new Error('Custom payment method already exists')
-
+    if (!wallet) throw new NotFoundError('Wallet not found')
+    if (!owner) throw new NotFoundError('Owner not found')
+    if (customPaymentMethod) throw new UnauthorizedError('Custom payment method already exists')
     await this.customPaymentRepository.save(
       new CustomPaymentMethod(input.customPaymentMethod, input.description)
     )
-
     return {
       name: input.customPaymentMethod,
       description: input.description,
