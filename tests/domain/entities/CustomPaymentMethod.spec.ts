@@ -1,5 +1,6 @@
 import CustomPaymentMethod from '@/domain/entity/CustomPaymentMethod'
 import CustomInfo from '@/domain/entity/CustomInfo'
+import { UnauthorizedError } from '@/application/errors/errors'
 
 describe('CustomPaymentMethod', () => {
   let sut: CustomPaymentMethod
@@ -30,7 +31,9 @@ describe('CustomPaymentMethod', () => {
       '15998204926',
       'chave pix necessária para receber transferencias'
     )
-    const error = new Error('O método de pagamento já possui essa informação cadastrada')
+    const error = new UnauthorizedError(
+      'O método de pagamento já possui essa informação cadastrada'
+    )
     expect(() => sut.addCustomInfo(duplicatedCustomInfo)).toThrow(error)
   })
 })

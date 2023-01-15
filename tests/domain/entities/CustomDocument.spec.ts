@@ -1,6 +1,7 @@
 import CustomPaymentMethod from '@/domain/entity/CustomPaymentMethod'
 import CustomInfo from '@/domain/entity/CustomInfo'
 import CustomDocument from '@/domain/entity/CustomDocument'
+import { UnauthorizedError } from '@/application/errors/errors'
 
 describe('CustomDocument', () => {
   let sut: CustomDocument
@@ -23,7 +24,7 @@ describe('CustomDocument', () => {
   it('Should throw an error when tries to add an customInfo with the same title', () => {
     sut.addCustomInfo(new CustomInfo('RG', '54244244-X', 'Documento de identidade'))
     const duplicatedCustomInfo = new CustomInfo('RG', '54244244-X', 'Documento de identidade')
-    const error = new Error('O documento já possui essa informação cadastrada')
+    const error = new UnauthorizedError('O documento já possui essa informação cadastrada')
     expect(() => sut.addCustomInfo(duplicatedCustomInfo)).toThrow(error)
   })
 })

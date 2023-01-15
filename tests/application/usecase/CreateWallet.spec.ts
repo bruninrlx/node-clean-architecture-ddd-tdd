@@ -1,6 +1,3 @@
-import CustomPaymentMethod from '@/domain/entity/CustomPaymentMethod'
-import CustomInfo from '@/domain/entity/CustomInfo'
-import CustomDocument from '@/domain/entity/CustomDocument'
 import { mock, MockProxy } from 'jest-mock-extended'
 import WalletRepository from '@/domain/repository/WalletRepository'
 import Wallet from '@/domain/entity/Wallet'
@@ -17,14 +14,10 @@ describe('CreateAnWallet', () => {
   beforeEach(() => {
     repositoryFactory = mock<RepositoryFactory>()
     queue = mock()
-
     const ownerRepository = mock<OwnerRepository>()
-
     const walletRepository = mock<WalletRepository>()
-
     repositoryFactory.createOwnerRepository.mockReturnValue(ownerRepository)
     repositoryFactory.createWalletRepository.mockReturnValue(walletRepository)
-
     queue.consume.mockResolvedValue({
       id: 'any_id',
       userEmail: 'mumuzera@gmail.com',

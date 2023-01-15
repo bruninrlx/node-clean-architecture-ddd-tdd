@@ -7,6 +7,8 @@ import AddCustomPaymentMethod from '@/application/usecase/add-custom-payment-met
 import Owner from '@/domain/entity/Owner'
 import CustomPaymentMethodRepository from '@/domain/repository/CustomPaymentMethodRepository'
 import CustomPaymentMethod from '@/domain/entity/CustomPaymentMethod'
+import { Input } from './add-custom-payment-method/Input'
+import { NotFoundError } from '@/application/errors/errors'
 
 describe('AddCustomPaymentMethod', () => {
   let repositoryFactory: MockProxy<RepositoryFactory>
@@ -14,6 +16,7 @@ describe('AddCustomPaymentMethod', () => {
   let ownerRepository: MockProxy<OwnerRepository>
   let customPaymentMethod: MockProxy<CustomPaymentMethodRepository>
   let sut: AddCustomPaymentMethod
+  let input: Input
 
   beforeEach(async () => {
     repositoryFactory = mock()
@@ -23,20 +26,31 @@ describe('AddCustomPaymentMethod', () => {
     repositoryFactory.createWalletRepository.mockReturnValue(walletRepository)
     repositoryFactory.createOwnerRepository.mockReturnValue(ownerRepository)
     repositoryFactory.createCustomPaymentMethodRepository.mockReturnValue(customPaymentMethod)
-    sut = new AddCustomPaymentMethod(repositoryFactory)
-  })
-
-  it('should create an custom payment method', async () => {
-    const input = {
+    input = {
       ownerCode: 'any_owner_code',
       customPaymentMethod: 'any_payment_method',
       description: 'any_description',
     }
+    sut = new AddCustomPaymentMethod(repositoryFactory)
+  })
+
+  it('should create an custom payment method', async () => {
     walletRepository.getByOwnerCode.mockReturnValue(Promise.resolve(new Wallet('any_owner_code')))
     ownerRepository.getByCode.mockReturnValue(
       Promise.resolve(new Owner('any_owner_code', 'any_user_email', 'any_user_name'))
     )
     const output = await sut.execute(input)
     expect(output).toEqual(new CustomPaymentMethod(input.customPaymentMethod, input.description))
+  })
+
+  it('should throw an error when wallet not found', async () => {
+    walletRepository.getByOwnerCode.mockReturnValue(Promise.resolve(undefined))
+    await expect(sut.execute(input)).rejects.toThrow(new NotFoundError('Wallet not found'))
+  })
+
+  it('should throw an error when owner not found', async () => {
+    walletRepository.getByOwnerCode.mockReturnValue(Promise.resolve(new Wallet('any_owner_code')))
+    ownerRepository.getByCode.mockReturnValue(Promise.resolve(undefined))
+    await expect(sut.execute(input)).rejects.toThrow(new NotFoundError('Owner not found'))
   })
 })
