@@ -1,3 +1,4 @@
+import { UnauthorizedError } from '@/application/errors/errors'
 import CustomInfo from './CustomInfo'
 
 export default class CustomPaymentMethod {
@@ -12,7 +13,7 @@ export default class CustomPaymentMethod {
       (customInfo) => customInfo.title === customInfo.title
     )
     if (hasDuplicatedCustomInfo)
-      throw new Error('O método de pagamento já possui essa informação cadastrada')
+      throw new UnauthorizedError('O método de pagamento já possui essa informação cadastrada')
     this.customInfos.push(customInfo)
   }
 }

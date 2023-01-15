@@ -1,3 +1,4 @@
+import { UnauthorizedError } from '@/application/errors/errors'
 import CustomInfo from './CustomInfo'
 
 export default class CustomDocument {
@@ -11,7 +12,8 @@ export default class CustomDocument {
     const hasDuplicatedCustomInfo = this.customInfos.some(
       (customInfo) => customInfo.title === customInfo.title
     )
-    if (hasDuplicatedCustomInfo) throw new Error('O documento já possui essa informação cadastrada')
+    if (hasDuplicatedCustomInfo)
+      throw new UnauthorizedError('O documento já possui essa informação cadastrada')
     this.customInfos.push(customInfo)
   }
 }
