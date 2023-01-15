@@ -1,3 +1,4 @@
+import { NotFoundError } from '@/application/errors/errors'
 import Card from '@/domain/entity/Card'
 import PaymentMethod from '@/domain/entity/PaymentMethod'
 import RepositoryFactory from '@/domain/factory/RepositoryFactory'
@@ -23,8 +24,8 @@ export default class AddPaymentMethod {
     const { ownerName, brand, cardNumber, bank, cvv, expiry } = input.paymentMethod.card
     const owner = await this.ownerRepository.getByCode(input.ownerCode)
     const wallet = await this.walletRepository.getByOwnerCode(input.ownerCode)
-    if (!wallet) throw new Error('Wallet not found')
-    if (!owner) throw new Error('Owner not found')
+    if (!wallet) throw new NotFoundError('Wallet not found')
+    if (!owner) throw new NotFoundError('Owner not found')
     const card = new Card(ownerName, brand, cardNumber, bank, cvv, expiry)
     const paymentMethod = new PaymentMethod(name, type, card)
     await this.paymentMethodRepository.save(paymentMethod)
