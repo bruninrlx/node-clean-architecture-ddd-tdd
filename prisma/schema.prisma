@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model PaymentMethod {
+  name        String @id @unique
+  type        String
+  card        Card   @relation(fields: [card_number], references: [card_number])
+  card_number String @unique
+  owner_code  String
+}
+
+model Card {
+  owner_name    String
+  brand         String
+  card_number   String         @unique
+  bank          String
+  cvv           String
+  expiry        String
+  PaymentMethod PaymentMethod?
+}
+
+model Owner {
+  owner_code                       String                             @id
+  user_email                       String
+  user_name                        String
+  Wallet                           Wallet?
+  CustomInfoOnCustomDocuments      CustomInfoOnCustomDocuments[]
+  CustomInfoOnCustomPaymentMethods CustomInfoOnCustomPaymentMethods[]
+}
+
+model Wallet {
+  owner_code          String                @id @unique
+  owner               Owner                 @relation(fields: [owner_code], references: [owner_code])
+  CustomDocument      CustomDocument[]
+  CustomPaymentMethod CustomPaymentMethod[]
+}
+
+model CustomPaymentMethod {
+  owner_code                       String
+  name                             String                             @unique
+  description                      String
+  CustomInfoOnCustomPaymentMethods CustomInfoOnCustomPaymentMethods[]
+  wallet                           Wallet?                            @relation(fields: [owner_code], references: [owner_code])
+  CustomInfoOnCustomDocuments      CustomInfoOnCustomDocuments[]
+
+  @@id([owner_code, name], name: "custom_payment_method_name_owner")
+}
+
+model CustomInfo {
+  title                            String                             @unique
+  info                             String
+  description                      String
+  CustomInfoOnCustomPaymentMethods CustomInfoOnCustomPaymentMethods[]
+  CustomInfoOnCustomDocuments      CustomInfoOnCustomDocuments[]
+}
+
+model CustomInfoOnCustomPaymentMethods {
+  name_custom_payment_method String
+  custom_paymen_method       CustomPaymentMethod @relation(fields: [name_custom_payment_method, owner_code], references: [name, owner_code])
+  title_custom_info          String
+  CustomInfo                 CustomInfo          @relation(fields: [title_custom_info], references: [title])
+  owner_code                 String
+  Owner                      Owner               @relation(fields: [owner_code], references: [owner_code])
+
+  @@id([name_custom_payment_method, title_custom_info, owner_code])
+}
+
+model CustomDocument {
+  owner_code                  String
+  name                        String
+  description                 String
+  wallet                      Wallet?                       @relation(fields: [owner_code], references: [owner_code])
+  CustomInfoOnCustomDocuments CustomInfoOnCustomDocuments[]
+
+  @@id([owner_code, name], name: "custom_document_name_owner")
+}
+
+model CustomInfoOnCustomDocuments {
+  title_custom_info       String // relation scalar field (used in the `@relation` attribute above)
+  CustomInfo              CustomInfo           @relation(fields: [title_custom_info], references: [title])
+  custom_document_name    String
+  CustomDocument          CustomDocument?      @relation(fields: [custom_document_name, owner_code], references: [name, owner_code])
+  CustomPaymentMethod     CustomPaymentMethod? @relation(fields: [customPaymentMethodName], references: [name])
+  Owner                   Owner                @relation(fields: [owner_code], references: [owner_code])
+  customPaymentMethodName String?
+  owner_code              String
+
+  @@id([custom_document_name, title_custom_info, owner_code])
+}

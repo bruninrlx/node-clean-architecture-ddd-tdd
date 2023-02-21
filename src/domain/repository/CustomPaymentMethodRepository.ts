@@ -1,9 +1,10 @@
 import CustomPaymentMethod from '../entity/CustomPaymentMethod'
 
 export default interface CustomPaymentMethodRepository {
-  save(customPaymentMethod: CustomPaymentMethod): Promise<void>
-  getByOwnerCodeAndCustomPaymentMethodTitle(
+  save(ownerCode: string, customPaymentMethod: CustomPaymentMethod): Promise<void>
+  getByOwnerCodeAndCustomPaymentMethodName(
     ownerCode: string,
-    customPaymentMethodTitle: string
+    customPaymentMethodName: string
   ): Promise<CustomPaymentMethod>
+  getCustomPaymentMethodsByOwnerCode(ownerCode: string): Promise<CustomPaymentMethod[]>
 }

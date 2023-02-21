@@ -1,0 +1,25 @@
+version: "3"
+
+volumes:
+  postgresql:
+  postgres_data:
+  locakstack:
+
+networks:
+  base:
+
+services:
+  database:
+    image: postgres:alpine
+    container_name: bumu-wallet
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - base
+    environment:
+      - POSTGRES_DB=bumu_wallet
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

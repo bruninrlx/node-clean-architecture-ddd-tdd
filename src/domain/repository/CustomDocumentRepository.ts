@@ -1,9 +1,10 @@
 import CustomDocument from '../entity/CustomDocument'
 
 export default interface CustomDocumentRepository {
-  save(customDocument: CustomDocument): Promise<void>
-  getByOwnerCodeAndCustomDocumentTitle(
+  save(ownerCode: string, customDocument: CustomDocument): Promise<void>
+  getByOwnerCodeAndCustomDocumentName(
     ownerCode: string,
-    customPaymentMethodTitle: string
+    customDocumentName: string
   ): Promise<CustomDocument>
+  getCustomDocumentsByOwnerCoder(ownerCode: string): Promise<CustomDocument[]>
 }
