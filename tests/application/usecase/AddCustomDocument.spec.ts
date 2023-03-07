@@ -17,7 +17,7 @@ describe('AddCustomDocument', () => {
     repositoryFactory.createCustomDocumentRepository.mockReturnValue(customDocumentRepository)
     input = {
       ownerCode: 'any_owner_code',
-      customDocumentTitle: 'any_custom_document',
+      customDocumentName: 'any_custom_document',
       description: 'any_description',
     }
     sut = new AddCustomDocument(repositoryFactory)
@@ -25,6 +25,6 @@ describe('AddCustomDocument', () => {
 
   it('should add an custom document', async () => {
     const output = await sut.execute(input)
-    expect(output).toEqual(new CustomDocument(input.customDocumentTitle, input.description))
+    expect(output).toEqual(new CustomDocument(input.customDocumentName, input.description))
   })
 })

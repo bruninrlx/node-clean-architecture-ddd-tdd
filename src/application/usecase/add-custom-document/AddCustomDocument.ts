@@ -1,4 +1,3 @@
-import { UnauthorizedError } from '@/application/errors/errors'
 import CustomDocument from '@/domain/entity/CustomDocument'
 import RepositoryFactory from '@/domain/factory/RepositoryFactory'
 import CustomDocumentRepository from '@/domain/repository/CustomDocumentRepository'
@@ -13,12 +12,7 @@ export default class AddCustomDocument {
   }
 
   async execute(input: Input): Promise<Output> {
-    const customDocument = await this.customDocumentRepository.getByOwnerCodeAndCustomDocumentName(
-      input.ownerCode,
-      input.customDocumentTitle
-    )
-    if (customDocument) throw new UnauthorizedError('Custom document already exists')
-    const currentCustomDocument = new CustomDocument(input.customDocumentTitle, input.description)
+    const currentCustomDocument = new CustomDocument(input.customDocumentName, input.description)
     await this.customDocumentRepository.save(input.ownerCode, currentCustomDocument)
     return currentCustomDocument as Output
   }

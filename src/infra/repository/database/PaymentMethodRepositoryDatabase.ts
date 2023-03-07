@@ -9,15 +9,6 @@ export class PaymentMethodRepositoryDatabase implements PaymentMethodRepository 
   constructor(readonly prisma: PrismaClient) {}
 
   async save(owner_code: string, paymentMethod: PaymentMethod): Promise<void> {
-    await this.prisma.paymentMethod.create({
-      data: {
-        name: paymentMethod.name,
-        type: paymentMethod.type,
-        card_number: paymentMethod.card.cardNumber,
-        owner_code: owner_code,
-      },
-    })
-
     await this.prisma.card.create({
       data: {
         owner_name: paymentMethod.card.ownerName,
@@ -26,6 +17,15 @@ export class PaymentMethodRepositoryDatabase implements PaymentMethodRepository 
         bank: paymentMethod.card.bank,
         cvv: paymentMethod.card.cvv,
         expiry: paymentMethod.card.expiry,
+      },
+    })
+
+    await this.prisma.paymentMethod.create({
+      data: {
+        name: paymentMethod.name,
+        type: paymentMethod.type,
+        card_number: paymentMethod.card.cardNumber,
+        owner_code: owner_code,
       },
     })
   }

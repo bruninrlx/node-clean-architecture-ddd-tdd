@@ -1,4 +1,4 @@
-export type input = {
+export type Input = {
   ownerCode: string
   paymentMethod: {
     name: string

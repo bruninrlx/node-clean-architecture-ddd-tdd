@@ -1,3 +1,3 @@
-export default class SuccessView {
-  constructor(readonly status: number, readonly response: any) {}
+export default class SuccessView<T> {
+  constructor(readonly status: number, readonly response: T) {}
 }

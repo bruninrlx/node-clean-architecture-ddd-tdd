@@ -1,4 +1,4 @@
-export type output = {
+export type Output = {
   name: string
   type: string
   card: {

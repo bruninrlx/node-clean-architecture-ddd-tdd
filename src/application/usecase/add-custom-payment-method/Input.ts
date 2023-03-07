@@ -1,5 +1,5 @@
 export type Input = {
   ownerCode: string
-  customPaymentMethod: string
+  customPaymentMethodName: string
   description: string
 }

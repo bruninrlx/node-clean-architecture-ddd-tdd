@@ -13,7 +13,6 @@ export default class GetWallet {
 
   async execute(ownerCode: string): Promise<Output> {
     const wallet = await this.walletRepository.getByOwnerCode(ownerCode)
-    if (!wallet) throw new NotFoundError('Wallet not found')
     return wallet
   }
 }

@@ -6,7 +6,7 @@ import { PrismaClient } from '@prisma/client'
 export class OwnerRepositoryDatabase implements OwnerRepository {
   constructor(readonly prisma: PrismaClient) {}
   async save(owner: Owner): Promise<void> {
-    this.prisma.owner.create({
+    await this.prisma.owner.create({
       data: {
         owner_code: owner.ownerCode,
         user_email: owner.userEmail,

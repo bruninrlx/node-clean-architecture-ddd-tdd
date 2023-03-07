@@ -1,6 +1,6 @@
 export type Input = {
   ownerCode: string
-  customPaymentMethodTitle: string
+  customPaymentMethodName: string
   description: string
   customInfo: {
     title: string

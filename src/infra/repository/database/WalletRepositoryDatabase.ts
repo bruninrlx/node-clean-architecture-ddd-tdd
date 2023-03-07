@@ -14,7 +14,13 @@ export class WalletRepositoryDatabase implements WalletRepository {
     readonly paymentMethodRepository: PaymentMethodRepository
   ) {}
 
-  async save(wallet: Wallet): Promise<void> {}
+  async save(wallet: Wallet): Promise<void> {
+    await this.prisma.wallet.create({
+      data: {
+        owner_code: wallet.ownerCode,
+      },
+    })
+  }
   async getByOwnerCode(ownerCode: string): Promise<Wallet> {
     const walletPrisma = await this.prisma.wallet.findUnique({
       where: {

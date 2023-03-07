@@ -1,6 +1,6 @@
 export type Input = {
   ownerCode: string
-  customDocumentTitle: string
+  customDocumentName: string
   description: string
   customInfo: {
     title: string

@@ -1,37 +1,22 @@
-import express from "express";
-import Http from "./Http";
+import express from 'express'
+import HttpServer from './HttpServer'
 
-export default class ExpressHttp implements Http {
-	app: any;
+export default class ExpressAdapter implements HttpServer {
+  app: any
 
-	constructor () {
-		this.app = express();
+  constructor() {
+    this.app = express()
+    this.app.use(express.json())
+  }
 
-		this.app.use(express.json());
+  on(method: string, url: string, callback: Function): void {
+    this.app[method](url, async function (req: any, res: any) {
+      const output = await callback(req.query, req.body)
+      res.status(output.status).json(output)
+    })
+  }
 
-		// @ts-ignore
-		this.app.all('*', function (req, res, next) {1
-			res.header('Access-Control-Allow-Origin', '*');
-			res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-			res.header('Access-Control-Allow-Headers', 'Content-Type, x-access-token, Authorization');
-			next();
-		});
-		
-		// @ts-ignore
-		this.app.options('*', function (req, res, next) {
-			res.end();
-		});
-	}
-	
-	async route(method: string, url: string, callback: any): Promise<any> {
-		this.app[method](url, async function (req: any, res: any) {
-			const result = await callback(req.params, req.body);
-			res.json(result);
-		});
-	}
-
-	async listen(port: number): Promise<void> {
-		await this.app.listen(port, () => console.log(`Server running at http://localhost:3002`));
-		
-	}
+  listen(port: number): void {
+    this.app.listen(port)
+  }
 }

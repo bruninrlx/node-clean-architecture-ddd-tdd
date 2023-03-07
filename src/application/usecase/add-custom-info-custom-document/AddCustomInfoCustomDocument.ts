@@ -14,12 +14,17 @@ export default class AddCustomInfoCustomDocument {
   }
 
   async execute(input: Input): Promise<Output> {
-    const customInfo =
-      await this.customInfoCustomDocumentRepository.getByOwnerCodeAndCustomDocumentNameAndCustomInfoTtitle(
-        input.ownerCode,
-        input.customDocumentTitle,
-        input.customInfo.title
-      )
+    let customInfo: CustomInfo | undefined
+    try {
+      customInfo =
+        await this.customInfoCustomDocumentRepository.getByOwnerCodeAndCustomDocumentNameAndCustomInfoTtitle(
+          input.ownerCode,
+          input.customDocumentName,
+          input.customInfo.title
+        )
+    } catch (error) {
+      customInfo = undefined
+    }
     if (customInfo)
       throw new UnauthorizedError('Custom info already registered to this payment method')
     const currentCustomInfo = new CustomInfo(
@@ -27,7 +32,11 @@ export default class AddCustomInfoCustomDocument {
       input.customInfo.info,
       input.customInfo.description
     )
-    await this.customInfoCustomDocumentRepository.save(input.customDocumentTitle, currentCustomInfo)
+    await this.customInfoCustomDocumentRepository.save(
+      input.ownerCode,
+      input.customDocumentName,
+      currentCustomInfo
+    )
     return currentCustomInfo as Output
   }
 }

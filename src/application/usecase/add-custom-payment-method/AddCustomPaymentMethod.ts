@@ -1,4 +1,3 @@
-import { UnauthorizedError } from '@/application/errors/errors'
 import CustomPaymentMethod from '@/domain/entity/CustomPaymentMethod'
 import RepositoryFactory from '@/domain/factory/RepositoryFactory'
 import CustomPaymentMethodRepository from '@/domain/repository/CustomPaymentMethodRepository'
@@ -13,14 +12,8 @@ export default class AddCustomPaymentMethod {
   }
 
   async execute(input: Input): Promise<Output> {
-    const customPaymentMethod =
-      await this.customPaymentRepository.getByOwnerCodeAndCustomPaymentMethodName(
-        input.ownerCode,
-        input.customPaymentMethod
-      )
-    if (customPaymentMethod) throw new UnauthorizedError('Custom payment method already exists')
     const currentCustomPaymentMethod = new CustomPaymentMethod(
-      input.customPaymentMethod,
+      input.customPaymentMethodName,
       input.description
     )
     await this.customPaymentRepository.save(input.ownerCode, currentCustomPaymentMethod)

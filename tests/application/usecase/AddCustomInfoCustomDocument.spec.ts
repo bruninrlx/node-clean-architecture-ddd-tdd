@@ -1,6 +1,5 @@
 import RepositoryFactory from '@/domain/factory/RepositoryFactory'
 import { mock, MockProxy } from 'jest-mock-extended'
-import CustomDocument from '@/domain/entity/CustomDocument'
 import { UnauthorizedError } from '@/application/errors/errors'
 import AddCustomInfoCustomDocument from '@/application/usecase/add-custom-info-custom-document/AddCustomInfoCustomDocument'
 import { Input } from '@/application/usecase/add-custom-info-custom-document/Input'
@@ -21,7 +20,7 @@ describe('AddCustomInfoCustomDocument', () => {
     )
     input = {
       ownerCode: 'any_owner_code',
-      customDocumentTitle: 'any_custom_document',
+      customDocumentName: 'any_custom_document',
       description: 'any_description',
       customInfo: {
         title: 'any_custom_info_title',
@@ -40,7 +39,8 @@ describe('AddCustomInfoCustomDocument', () => {
     )
     const output = await sut.execute(input)
     expect(customInfoCustomDocumentRepository.save).toHaveBeenCalledWith(
-      input.customDocumentTitle,
+      input.ownerCode,
+      input.customDocumentName,
       customDocument
     )
     expect(output).toEqual(customDocument)

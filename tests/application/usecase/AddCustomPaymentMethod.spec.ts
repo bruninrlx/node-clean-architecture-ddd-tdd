@@ -17,7 +17,7 @@ describe('AddCustomPaymentMethod', () => {
     repositoryFactory.createCustomPaymentMethodRepository.mockReturnValue(customPaymentMethod)
     input = {
       ownerCode: 'any_owner_code',
-      customPaymentMethod: 'any_payment_method',
+      customPaymentMethodName: 'any_payment_method',
       description: 'any_description',
     }
     sut = new AddCustomPaymentMethod(repositoryFactory)
@@ -25,6 +25,8 @@ describe('AddCustomPaymentMethod', () => {
 
   it('should create an custom payment method', async () => {
     const output = await sut.execute(input)
-    expect(output).toEqual(new CustomPaymentMethod(input.customPaymentMethod, input.description))
+    expect(output).toEqual(
+      new CustomPaymentMethod(input.customPaymentMethodName, input.description)
+    )
   })
 })

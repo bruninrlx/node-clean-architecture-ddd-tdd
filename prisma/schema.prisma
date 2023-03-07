@@ -78,7 +78,7 @@ model CustomDocument {
   owner_code                  String
   name                        String
   description                 String
-  wallet                      Wallet?                       @relation(fields: [owner_code], references: [owner_code])
+  owner                       Wallet?                       @relation(fields: [owner_code], references: [owner_code])
   CustomInfoOnCustomDocuments CustomInfoOnCustomDocuments[]
 
   @@id([owner_code, name], name: "custom_document_name_owner")

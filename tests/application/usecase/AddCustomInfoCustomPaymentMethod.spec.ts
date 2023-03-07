@@ -34,7 +34,7 @@ describe('AddCustomInfoCustomPaymentMethod', () => {
     )
     input = {
       ownerCode: 'any_owner_code',
-      customPaymentMethodTitle: 'any_custom_payment_method_title',
+      customPaymentMethodName: 'any_custom_payment_method_title',
       description: 'any_description',
       customInfo: {
         title: 'any_custom_info_title',
@@ -54,7 +54,7 @@ describe('AddCustomInfoCustomPaymentMethod', () => {
     const output = await sut.execute(input)
     expect(customInfoCustomPaymentMethodRepository.save).toHaveBeenCalledWith(
       input.ownerCode,
-      input.customPaymentMethodTitle,
+      input.customPaymentMethodName,
       customInfo
     )
     expect(output).toEqual(customInfo)
