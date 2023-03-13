@@ -37,7 +37,9 @@ export default class Router {
     httpServer.on('post', '/custom-document-custom-info', (params: any, body: any) =>
       this.addCustomInfoCustomDocumentController.execute({
         ownerCode: params.owner_code,
-        ...body,
+        customDocumentName: params.custom_document_name,
+        description: params.description,
+        customInfo: body,
       })
     )
 
@@ -52,30 +54,24 @@ export default class Router {
       this.getCustomPaymentMethodController.execute(params.owner_code)
     )
 
-    httpServer.on('post', '/custom-payment-custom-info', (params: any, body: any) =>
+    httpServer.on('post', '/custom-payment-method-custom-info', (params: any, body: any) =>
       this.addCustomInfoCustomPaymentMethodController.execute({
         ownerCode: params.owner_code,
-        ...body,
+        customPaymentMethodName: params.custom_payment_method_name,
+        description: params.description,
+        customInfo: body,
       })
     )
 
     httpServer.on('post', '/payment-method', (params: any, body: any) =>
       this.addPaymentMethodController.execute({
         ownerCode: params.owner_code,
-        ...body,
+        paymentMethod: body,
       })
     )
 
     httpServer.on('get', '/payment-method', (params: any, _body: any) =>
       this.getPaymentMethodsController.execute(params.owner_code)
     )
-
-    httpServer.on('get', '/payment-method', (params: any, _body: any) =>
-      this.getWalletController.execute(params.owner_code)
-    )
-
-    // httpServer.on('get', '/payment-method', (_params: any, _body: any) =>
-    //   this.createWalletController.execute()
-    // )
   }
 }

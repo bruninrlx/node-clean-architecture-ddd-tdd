@@ -1,4 +1,4 @@
-import { InternalServerError } from '@/application/errors/errors'
+import { NotFoundError } from '@/application/errors/errors'
 import AddCustomInfoCustomPaymentMethod from '@/application/usecase/add-custom-info-custom-payment-method/AddCustomInfoCustomPaymentMethod'
 import { Input } from '@/application/usecase/add-custom-info-custom-payment-method/Input'
 import { Output } from '@/application/usecase/add-custom-info-custom-payment-method/Output'
@@ -14,12 +14,8 @@ export default class AddCustomInfoCustomPaymentMethodController {
       const output = await this.addCustomInfoCustomPaymentMethod.execute(input)
       return new SuccessView(HttpStatusCode.Created, output)
     } catch (error) {
-      if (error instanceof Error) return new FailView(HttpStatusCode.InternalServerError, error)
-      else
-        return new FailView(
-          HttpStatusCode.InternalServerError,
-          new InternalServerError('ServerError')
-        )
+      if (error instanceof Error) return new FailView(HttpStatusCode.NotFound, error)
+      else return new FailView(HttpStatusCode.NotFound, new NotFoundError('ServerError'))
     }
   }
 }

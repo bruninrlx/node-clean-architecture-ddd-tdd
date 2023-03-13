@@ -43,4 +43,4 @@ new Router(
   new GetPaymentMethodsController(getPaymentMethods),
   new GetWalletController(getWallet)
 )
-http.listen(3002)
+export const server = http.listen(process.env.PORT ?? 3002)

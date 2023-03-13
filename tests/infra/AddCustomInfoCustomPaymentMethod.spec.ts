@@ -3,7 +3,7 @@ import AddCustomInfoPaymentMethodController from '@/infra/controller/AddCustomIn
 import { mock, MockProxy } from 'jest-mock-extended'
 import SuccessView from '@/infra/presenters/SuccessView'
 import { HttpStatusCode } from '@/infra/http/HttpStatusCode'
-import { BadRequestError } from '@/application/errors/errors'
+import { BadRequestError, NotFoundError } from '@/application/errors/errors'
 import FailView from '@/infra/presenters/FailView'
 import AddCustomInfoCustomPaymentMethod from '@/application/usecase/add-custom-info-custom-payment-method/AddCustomInfoCustomPaymentMethod'
 import CustomInfo from '@/domain/entity/CustomInfo'
@@ -37,12 +37,12 @@ describe('AddCustomInfoCustomPaymentMethodController', () => {
   })
 
   it('should return a FailView with the correct status code and error data', async () => {
-    const unauthorizedError = new BadRequestError(
+    const notFoundError = new NotFoundError(
       'Error when tries to save an custom info to an custom payment method'
     )
-    addCustomInfoCustomPaymentMethod.execute.mockRejectedValue(unauthorizedError)
+    addCustomInfoCustomPaymentMethod.execute.mockRejectedValue(notFoundError)
     const output = await sut.execute(input)
-    const failView = new FailView(HttpStatusCode.InternalServerError, unauthorizedError)
+    const failView = new FailView(HttpStatusCode.NotFound, notFoundError)
     expect(output).toEqual(failView)
   })
 })

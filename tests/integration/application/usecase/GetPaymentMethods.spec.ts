@@ -50,7 +50,7 @@ describe('GetPaymentMethodsIntegrationTest', () => {
         card: {
           ownerName: 'any_name',
           brand: 'any_brand',
-          cardNumber: 'any_cardNumber',
+          cardNumber: 'kkkk',
           bank: 'any_bank',
           cvv: 'any_cvv',
           expiry: 'any_expiry',
@@ -61,7 +61,7 @@ describe('GetPaymentMethodsIntegrationTest', () => {
       data: {
         owner_name: input.paymentMethod.card.ownerName,
         brand: input.paymentMethod.card.brand,
-        card_number: input.paymentMethod.card.cardNumber,
+        card_number: 'kkkk',
         bank: input.paymentMethod.card.bank,
         cvv: input.paymentMethod.card.cvv,
         expiry: input.paymentMethod.card.expiry,

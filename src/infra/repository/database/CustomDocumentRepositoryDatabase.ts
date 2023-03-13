@@ -8,7 +8,6 @@ export class CustomDocumentRepositoryDatabase implements CustomDocumentRepositor
   constructor(readonly prisma: PrismaClient) {}
 
   async save(ownerCode: string, customDocument: CustomDocument): Promise<void> {
-    console.log(ownerCode, customDocument)
     await this.prisma.customDocument.create({
       data: {
         name: customDocument.name,
@@ -16,7 +15,6 @@ export class CustomDocumentRepositoryDatabase implements CustomDocumentRepositor
         owner_code: ownerCode,
       },
     })
-    console.log('teste kkkkkkkk')
   }
 
   async getByOwnerCodeAndCustomDocumentName(
