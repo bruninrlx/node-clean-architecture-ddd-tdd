@@ -9,4 +9,10 @@ Any suggested changes, I will humbly accept, as every suggestion is welcome to m
 
 Any pull request will be reviewed.
 
+For test you will need to have docker installed preferably on a linux or wsl with windows and then you will have to type the commands below
+
+1 - yarn install
+2 - docker-compose up
+3 - yarn test
+
 Thanks
