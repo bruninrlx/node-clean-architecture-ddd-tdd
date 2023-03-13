@@ -1,0 +1,10 @@
+This is a repository for studying clean arch in node, using DDD to model the domain even though it is a very basic domain. 
+TDD was also applied to try to cover the entire project with tests.
+
+As for me, who designed the project, 
+I could see that the controllers and presenters lacked greater care, especially when it comes to presenting errors to the user 
+and also when using the supertest testing tool with the routes.
+
+Any suggested changes, I will humbly accept, as every suggestion is welcome to me.
+
+Any pull request will be reviewed.
